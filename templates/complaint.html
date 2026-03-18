@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
+<!-- ✅ MOBILE FIX -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NMC Smart Complaint Portal</title>
 
 <style>
@@ -14,32 +18,25 @@ font-family:'Poppins',sans-serif;
 
 /* BACKGROUND */
 body{
-background:url("https://smsl.co.in/wp-content/uploads/2024/03/nagpur-bhandewadi-1024x576.jpg") no-repeat center center fixed;
+background:url("https://th.bing.com/th/id/OIP.hyizJt3Hn61Dqu_uHiPuwAHaEH?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3") no-repeat center center fixed;
 background-size:cover;
 min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-padding:20px;
-position:relative;
+padding:15px;
 }
 
-/* GLASS CONTAINER WITHOUT BLUR */
+/* CONTAINER */
 .container{
-width:520px;
-background:rgba(255,255,255,0.15); /* Slight transparency */
+width:100%;
+max-width:520px;
+background:rgba(255,255,255,0.15);
 border-radius:20px;
-padding:35px;
+padding:25px;
 box-shadow:0 20px 60px rgba(0,0,0,0.4);
 color:white;
-animation:fadeIn 1s ease;
 border:1px solid rgba(255,255,255,0.2);
-}
-
-/* FADE IN ANIMATION */
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(40px);}
-to{opacity:1;transform:translateY(0);}
 }
 
 /* LOGO */
@@ -48,61 +45,51 @@ text-align:center;
 margin-bottom:10px;
 }
 .logo img{
-width:80px;
+width:70px;
 border-radius:10px;
 }
 
 /* TITLE */
 h1{
 text-align:center;
-margin-bottom:20px;
-font-weight:600;
-letter-spacing:1px;
+margin-bottom:15px;
+font-size:22px;
 }
 
-/* FORM LABEL */
+/* LABEL */
 label{
-margin-top:12px;
+margin-top:10px;
 display:block;
-font-weight:500;
-font-size:14px;
+font-size:13px;
 }
 
 /* INPUTS */
 input,select,textarea{
 width:100%;
-padding:11px;
-margin-top:6px;
+padding:10px;
+margin-top:5px;
 border:none;
 border-radius:8px;
-outline:none;
-font-size:14px;
+font-size:13px;
 background:rgba(255,255,255,0.9);
 }
 
 /* TEXTAREA */
 textarea{
-height:90px;
-resize:none;
+height:80px;
 }
 
 /* BUTTON */
 button{
 width:100%;
-padding:12px;
-margin-top:15px;
+padding:11px;
+margin-top:12px;
 border:none;
 border-radius:8px;
-font-size:15px;
+font-size:14px;
 cursor:pointer;
 color:white;
 background:linear-gradient(45deg,#ff6b00,#ff9d00);
-transition:0.3s;
-font-weight:600;
-}
-button:hover{
-transform:scale(1.03);
-box-shadow:0 10px 25px rgba(0,0,0,0.4);
 }
 
 /* VOICE BUTTON */
@@ -110,39 +97,32 @@ box-shadow:0 10px 25px rgba(0,0,0,0.4);
 background:linear-gradient(45deg,#0099ff,#00c6ff);
 }
 
-/* IMAGE PREVIEW */
-.preview{
-margin-top:10px;
-}
+/* PREVIEW */
 .preview img{
 width:100%;
 border-radius:10px;
 display:none;
-box-shadow:0 10px 20px rgba(0,0,0,0.3);
+margin-top:8px;
 }
 
 /* MAP */
 .map{
-height:200px;
+height:180px;
 margin-top:10px;
 border-radius:10px;
 overflow:hidden;
 }
 
-/* BACK BUTTON */
+/* BACK */
 .back-btn{
 display:block;
 text-align:center;
-margin-top:15px;
+margin-top:12px;
 background:#222;
 padding:10px;
 border-radius:8px;
 text-decoration:none;
 color:white;
-transition:0.3s;
-}
-.back-btn:hover{
-background:#444;
 }
 
 /* LOADER */
@@ -150,20 +130,20 @@ background:#444;
 display:none;
 text-align:center;
 margin-top:10px;
-font-weight:bold;
+font-size:13px;
 color:#ffd700;
 }
 
-/* MOBILE RESPONSIVE */
-@media(max-width:600px){
-.container{
-width:100%;
-padding:25px;
-}
+/* ✅ MOBILE EXTRA FIX */
+@media(max-width:400px){
 h1{
-font-size:22px;
+font-size:20px;
+}
+button{
+font-size:13px;
 }
 }
+
 </style>
 
 </head>
@@ -180,10 +160,10 @@ font-size:22px;
 <form method="POST" enctype="multipart/form-data" onsubmit="showLoader()">
 
 <select name="area" required>
-  <option value="">Select Ward</option>
-  {% for i in range(1, 39) %}
-    <option value="Ward {{ i }}">Ward {{ i }}</option>
-  {% endfor %}
+<option value="">Select Ward</option>
+{% for i in range(1, 39) %}
+<option value="Ward {{ i }}">Ward {{ i }}</option>
+{% endfor %}
 </select>
 
 <label>Category</label>
@@ -230,6 +210,7 @@ font-size:22px;
 </div>
 
 <script>
+
 /* IMAGE PREVIEW */
 function previewImage(event){
 const reader=new FileReader();
@@ -253,20 +234,25 @@ document.getElementById("map").src=
 });
 }
 
-/* VOICE INPUT */
+/* VOICE INPUT FIX */
 function startVoice(){
-var recognition=new webkitSpeechRecognition();
+if('webkitSpeechRecognition' in window){
+let recognition=new webkitSpeechRecognition();
 recognition.lang="en-IN";
 recognition.onresult=function(event){
 document.getElementById("issue").value=event.results[0][0].transcript;
 }
 recognition.start();
+}else{
+alert("Voice not supported on this device");
+}
 }
 
 /* LOADER */
 function showLoader(){
 document.getElementById("loader").style.display="block";
 }
+
 </script>
 
 </body>

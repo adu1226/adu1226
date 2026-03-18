@@ -3,6 +3,10 @@
 <head>
 
 <meta charset="UTF-8">
+
+<!-- ✅ IMPORTANT FOR MOBILE -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NMC Smart Complaint Dashboard</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -25,22 +29,17 @@ animation:bgMove 12s infinite;
 min-height:100vh;
 }
 
-@keyframes bgMove{
-0%{background-position:0% 50%}
-50%{background-position:100% 50%}
-100%{background-position:0% 50%}
-}
-
 /* HEADER */
 
 .header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:15px 30px;
+padding:15px;
 background:rgba(0,0,0,0.45);
 backdrop-filter:blur(10px);
 color:white;
+flex-wrap:wrap; /* ✅ mobile fix */
 }
 
 .logo-box{
@@ -50,13 +49,9 @@ gap:8px;
 }
 
 .logo-box img{
-width:40px;
-height:40px;
+width:35px;
+height:35px;
 border-radius:50%;
-}
-
-.logo-box h2{
-font-size:20px;
 }
 
 .header span{
@@ -67,16 +62,13 @@ font-weight:bold;
 /* CONTAINER */
 
 .container{
-width:80%;
+width:95%;  /* ✅ mobile fix */
 max-width:1000px;
 margin:auto;
-margin-top:25px;
-
-padding:20px;
-
+margin-top:20px;
+padding:15px;
 background:rgba(255,255,255,0.12);
 backdrop-filter:blur(12px);
-
 border-radius:12px;
 }
 
@@ -84,103 +76,81 @@ border-radius:12px;
 
 .stats{
 display:flex;
-gap:15px;
+gap:10px;
 flex-wrap:wrap;
-margin-bottom:20px;
+margin-bottom:15px;
 }
 
 .card{
 flex:1;
-min-width:180px;
-
-padding:18px;
-
+min-width:140px;
+padding:15px;
 border-radius:10px;
 color:white;
-
 text-align:center;
-
 background:linear-gradient(135deg,#ff6a00,#ff00cc);
-
 box-shadow:0 6px 15px rgba(0,0,0,0.3);
-
-transition:0.3s;
-}
-
-.card:hover{
-transform:translateY(-4px) scale(1.03);
 }
 
 .card h2{
-font-size:28px;
-margin-top:6px;
+font-size:22px;
+margin-top:5px;
 }
 
 /* BUTTONS */
 
 .btn{
 display:inline-block;
-padding:8px 16px;
+padding:8px 14px;
 background:#ff6a00;
 color:white;
 text-decoration:none;
 border-radius:5px;
-margin-right:8px;
+margin:5px 5px 0 0;
 font-weight:bold;
-font-size:14px;
-transition:0.3s;
-}
-
-.btn:hover{
-transform:scale(1.05);
-background:#ff3c00;
+font-size:13px;
 }
 
 .logout{
 background:#333;
 }
 
-.logout:hover{
-background:#000;
-}
-
 /* CHART */
 
 .chart-box{
-margin-top:20px;
+margin-top:15px;
 background:white;
-padding:15px;
+padding:10px;
 border-radius:8px;
-height:280px;
+height:250px;
 }
 
 /* TABLE */
 
+.table-wrapper{
+overflow-x:auto; /* ✅ mobile scroll */
+}
+
 table{
 width:100%;
-margin-top:20px;
+margin-top:15px;
 border-collapse:collapse;
 background:white;
 border-radius:8px;
 overflow:hidden;
-box-shadow:0 3px 10px rgba(0,0,0,0.2);
-font-size:14px;
+font-size:12px;
 }
 
 table th{
 background:#ff6a00;
 color:white;
-padding:10px;
+padding:8px;
 }
 
 table td{
-padding:10px;
+padding:8px;
 text-align:center;
 border-bottom:1px solid #eee;
-}
-
-table tr:hover{
-background:#f5f5f5;
 }
 
 /* STATUS */
@@ -188,35 +158,28 @@ background:#f5f5f5;
 .status-pending{
 background:#ff9800;
 color:white;
-padding:4px 10px;
+padding:3px 8px;
 border-radius:20px;
-font-size:12px;
-animation:pulse 1.5s infinite;
-}
-
-@keyframes pulse{
-0%{opacity:1}
-50%{opacity:0.6}
-100%{opacity:1}
+font-size:11px;
 }
 
 .status-solved{
 background:green;
 color:white;
-padding:4px 10px;
+padding:3px 8px;
 border-radius:20px;
-font-size:12px;
+font-size:11px;
 }
 
 /* ACTION BUTTON */
 
 .btn-small{
-padding:5px 10px;
+padding:4px 8px;
 background:green;
 color:white;
 text-decoration:none;
 border-radius:4px;
-font-size:12px;
+font-size:11px;
 }
 
 .delete{
@@ -226,7 +189,22 @@ background:red;
 .title{
 color:white;
 margin-top:15px;
-font-size:18px;
+font-size:16px;
+}
+
+/* ✅ EXTRA MOBILE FIX */
+@media(max-width:600px){
+
+.header{
+flex-direction:column;
+align-items:flex-start;
+gap:5px;
+}
+
+.card h2{
+font-size:20px;
+}
+
 }
 
 </style>
@@ -273,6 +251,7 @@ Pending
 
 <h3 class="title">All Complaints</h3>
 
+<div class="table-wrapper">
 <table>
 
 <tr>
@@ -288,29 +267,22 @@ Pending
 <tr>
 
 <td>{{ c[0] }}</td>
-
 <td>{{ c[1] }}</td>
-
 <td>{{ c[2] }}</td>
 
 <td>
-
 {% if c[9] == "Pending" %}
 <span class="status-pending">Pending</span>
 {% else %}
 <span class="status-solved">Solved</span>
 {% endif %}
-
 </td>
 
 <td>
-
 {% if c[9] == "Pending" %}
 <a href="/solve/{{ c[0] }}" class="btn-small">Solve</a>
 {% endif %}
-
 <a href="/delete/{{ c[0] }}" class="btn-small delete">Delete</a>
-
 </td>
 
 </tr>
@@ -318,19 +290,18 @@ Pending
 {% endfor %}
 
 </table>
+</div>
 
 </div>
 
 <script>
 
-let total = {{ total }};
-let pending = {{ pending }};
+let total = {{ total | tojson }};
+let pending = {{ pending | tojson }};
 let solved = total - pending;
 
 new Chart(document.getElementById("complaintChart"),{
-
 type:'doughnut',
-
 data:{
 labels:['Solved','Pending'],
 datasets:[{
@@ -338,16 +309,13 @@ data:[solved,pending],
 backgroundColor:['#28a745','#ff9800']
 }]
 },
-
 options:{
 responsive:true,
 maintainAspectRatio:false
 }
-
 });
 
 </script>
 
 </body>
 </html>
-
